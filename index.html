@@ -3,71 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> | </title>
-    <!-- 引入 Tailwind CSS：它允许我们直接在 HTML 标签中写样式 -->
+    <title>独立游戏工作室 | 我们的团队</title>
+    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        /* 这里是传统的 CSS 区域，用于定制 Tailwind 之外的特殊效果 */
+        /* 引入字体 */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
         
         body { 
             font-family: 'Noto Sans SC', sans-serif; 
-            background-color: #050505; /* 纯黑背景，更显专业感 */
+            background-color: #050505; 
             color: #ffffff;
-            scroll-behavior: smooth; /* 让点击导航栏后的滚动更丝滑 */
+            scroll-behavior: smooth;
         }
 
-        /* 游戏风格字体：用于标题 */
         .font-gaming { font-family: 'Orbitron', sans-serif; }
 
-        /* 英雄区渐变：创造一种深度感 */
         .hero-gradient {
             background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #050505 100%);
         }
 
-        /* 游戏卡片 CSS：定义了边框、背景色和过渡时间 */
+        /* 游戏卡片样式 */
         .game-card {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255, 255, 255, 0.05);
             background: rgba(255, 255, 255, 0.02);
             overflow: hidden;
         }
-
-        /* 悬停效果：当鼠标划过卡片时，边框变绿并产生发光效果 */
         .game-card:hover {
-            transform: scale(1.02); /* 轻微放大 */
-            border-color: #10b981; /* 翡翠绿边框 */
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.2); /* 绿色霓虹发光 */
+            transform: scale(1.02);
+            border-color: #10b981;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
         }
+        .game-card:hover .game-img { transform: scale(1.1); }
+        .game-img { transition: transform 0.6s ease; }
 
-        /* 内部图片缩放：鼠标悬停时图片缓慢放大 */
-        .game-card:hover .game-img {
-            transform: scale(1.1);
-        }
-
-        .game-img {
-            transition: transform 0.6s ease;
-        }
-
-        /* 扫描线装饰：模拟旧式显示器的质感 */
-        .scanlines {
-            position: relative;
-            overflow: hidden;
-        }
+        /* 扫描线效果 */
+        .scanlines { position: relative; overflow: hidden; }
         .scanlines::after {
             content: "";
             position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
-            /* 使用线性渐变制造细微的横纹 */
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
                         linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
             z-index: 2;
             background-size: 100% 4px, 3px 100%;
-            pointer-events: none; /* 确保装饰层不影响点击 */
+            pointer-events: none;
         }
 
-        /* 自定义主按钮样式 */
+        /* 按钮样式 */
         .btn-primary {
             background: #10b981;
             color: #000;
@@ -76,14 +61,23 @@
         .btn-primary:hover {
             background: #059669;
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-            transform: translateY(-2px); /* 悬停时轻微向上浮动 */
+            transform: translateY(-2px);
+        }
+
+        /* 团队头像特殊效果：黑白滤镜过渡 */
+        .team-img {
+            filter: grayscale(100%);
+            transition: all 0.5s ease;
+        }
+        .group:hover .team-img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body class="selection:bg-emerald-500 selection:text-white">
 
-    <!-- 导航栏使用了 Tailwind 的 Utility Classes (工具类) -->
-    <!-- fixed: 固定位置; top-0: 顶部对齐; z-50: 确保在最上层; backdrop-blur: 毛玻璃效果 -->
+    <!-- 导航栏 -->
     <nav class="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="font-gaming text-2xl font-bold tracking-tighter text-emerald-500 flex items-center">
@@ -92,8 +86,8 @@
             <div class="hidden md:flex space-x-12 text-sm font-medium tracking-widest uppercase text-gray-400">
                 <a href="#home" class="hover:text-emerald-400 transition">首页</a>
                 <a href="#games" class="hover:text-emerald-400 transition">游戏库</a>
-                <a href="#team" class="hover:text-emerald-400 transition">团队</a>
-                <a href="#join" class="hover:text-emerald-400 transition text-emerald-500">加入我们</a>
+                <a href="#team" class="hover:text-emerald-400 transition text-emerald-500">团队</a>
+                <a href="#join" class="hover:text-emerald-400 transition">加入我们</a>
             </div>
         </div>
     </nav>
@@ -114,49 +108,157 @@
                         浏览游戏
                     </a>
                     <a href="https://store.steampowered.com" target="_blank" class="border border-white/20 hover:bg-white/10 px-10 py-4 rounded-sm font-bold uppercase tracking-widest text-sm transition flex items-center gap-2">
+                        <!-- Steam SVG Icon -->
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-                        原神
+                        STEAM 主页
                     </a>
                 </div>
             </div>
             <div class="relative hidden md:block">
-                <!-- 右侧装饰图 -->
                 <div class="rounded-2xl border border-white/10 p-4 bg-white/5">
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="工作室照片" class="rounded-xl opacity-80 grayscale hover:grayscale-0 transition-all duration-700">
+                    <!-- 这里建议也换成你们的图片 -->
+                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="Studio" class="rounded-xl opacity-80 grayscale hover:grayscale-0 transition-all duration-700">
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 游戏库区域 -->
-    <main id="games" class="max-w-7xl mx-auto px-6 py-32">
+    <main id="games" class="max-w-7xl mx-auto px-6 py-32 border-b border-white/5">
         <div class="text-center mb-20">
             <h2 class="font-gaming text-4xl font-bold mb-4 tracking-tighter uppercase">Selected Works</h2>
             <div class="w-20 h-1 bg-emerald-500 mx-auto"></div>
         </div>
 
         <div class="grid md:grid-cols-2 gap-12">
-            <!-- 游戏卡片使用了之前 CSS 定义的 .game-card 类 -->
+            <!-- 游戏 1 -->
             <div class="game-card group rounded-3xl">
                 <div class="aspect-video relative overflow-hidden bg-gray-900">
-                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="星际核心" class="game-img w-full h-full object-cover opacity-60 group-hover:opacity-90">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="Core" class="game-img w-full h-full object-cover opacity-60 group-hover:opacity-90">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 left-8">
-                        <span class="bg-emerald-500 text-black text-[10px] font-black px-3 py-1 rounded-sm uppercase tracking-widest mb-3 inline-block">已在 Steam 发布</span>
+                        <span class="bg-emerald-500 text-black text-[10px] font-black px-3 py-1 rounded-sm uppercase tracking-widest mb-3 inline-block">已发布</span>
                         <h3 class="text-3xl font-bold font-gaming tracking-tight">星际核心 | CORE</h3>
                     </div>
                 </div>
                 <div class="p-8">
-                    <p class="text-gray-400 leading-relaxed">这是一款结合了资源管理与快节奏战斗的 roguelike 游戏。</p>
+                    <p class="text-gray-400 leading-relaxed">这是一款结合了资源管理与快节奏战斗的 roguelike 游戏。玩家将扮演一名失联的星际矿工，在变幻莫测的陨石带中寻求一线生机。</p>
                 </div>
             </div>
             
-            <!-- 更多卡片可以在此处添加... -->
+            <!-- 游戏 2 (占位) -->
+            <div class="game-card group rounded-3xl">
+                <div class="aspect-video relative overflow-hidden bg-gray-900">
+                    <div class="w-full h-full flex items-center justify-center text-gray-700 font-gaming">COMING SOON</div>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-400 leading-relaxed">下一款革命性的作品正在紧锣密鼓地开发中，敬请期待。</p>
+                </div>
+            </div>
         </div>
     </main>
 
-    <footer id="join" class="py-20 border-t border-white/5">
+    <!-- 团队介绍区域 (NEW) -->
+    <section id="team" class="max-w-7xl mx-auto px-6 py-32">
+        <div class="text-center mb-20">
+            <h2 class="font-gaming text-4xl font-bold mb-4 tracking-tighter uppercase">The Squad</h2>
+            <p class="text-gray-500 text-sm tracking-widest uppercase">Meet the developers behind the screen</p>
+            <div class="w-20 h-1 bg-emerald-500 mx-auto mt-6"></div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-x-8 gap-y-16">
+            
+            <!-- 成员 1: Xie -->
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
+                    <!-- 请确保 images 文件夹里有 xie.jpg -->
+                    <img src="./images/xie.jpg" alt="Xie" class="team-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <h3 class="font-gaming text-2xl text-white mb-2">XIE</h3>
+                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Core Developer</p>
+                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                    负责游戏核心架构搭建与物理引擎优化。他是团队的代码基石，热衷于在混乱的代码中寻找秩序，经常为了一个 0.01ms 的帧率提升熬夜到天亮。
+                </p>
+            </div>
+
+            <!-- 成员 2: Xu -->
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
+                    <img src="./images/xu.jpg" alt="Xu" class="team-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <h3 class="font-gaming text-2xl text-white mb-2">XU</h3>
+                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Lead Artist</p>
+                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                    掌控着整个游戏的视觉风格。从像素点到壮丽的背景原画，每一处色彩都出自他手。他坚信美术不仅是好看，更是游戏叙事的一部分。
+                </p>
+            </div>
+
+            <!-- 成员 3: Me -->
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
+                    <img src="./images/me.jpg" alt="Me" class="team-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <h3 class="font-gaming text-2xl text-white mb-2">ME</h3>
+                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Producer / Design</p>
+                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                    团队的粘合剂与方向舵。负责把那些疯狂的想法转化为可玩的游戏机制。擅长在预算有限的情况下，把“不可能”变成“也许可以试一试”。
+                </p>
+            </div>
+
+            <!-- 成员 4: Wang -->
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
+                    <img src="./images/wang.jpg" alt="Wang" class="team-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <h3 class="font-gaming text-2xl text-white mb-2">WANG</h3>
+                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Sound Engineer</p>
+                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                    用声音构建世界的人。无论是恢弘的背景音乐还是细微的脚步声，他都能精准捕捉。他的目标是让玩家闭上眼睛也能感受到游戏世界的呼吸。
+                </p>
+            </div>
+
+            <!-- 成员 5: Lin -->
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
+                    <img src="./images/lin.jpg" alt="Lin" class="team-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <h3 class="font-gaming text-2xl text-white mb-2">LIN</h3>
+                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Level Designer</p>
+                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                    关卡设计的魔术师。擅长设计精巧的迷宫和富有挑战性的敌人配置。他最喜欢的事情就是看着玩家在精心设计的陷阱前“受苦”并获得成就感。
+                </p>
+            </div>
+
+            <!-- 成员 6: Liu -->
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
+                    <img src="./images/liu.jpg" alt="Liu" class="team-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <h3 class="font-gaming text-2xl text-white mb-2">LIU</h3>
+                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">QA / Community</p>
+                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                    Bug 猎人与社区守护者。他确保游戏上线前消灭尽可能多的错误，并耐心地倾听每一位玩家的反馈。他是连接开发组与玩家之间的重要桥梁。
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer id="join" class="py-20 border-t border-white/5 bg-black">
         <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="font-gaming text-2xl font-bold mb-8">CONTACT HUB</h2>
+            <div class="flex justify-center gap-12 mb-16 text-gray-500">
+                <a href="#" class="hover:text-emerald-500 transition font-bold tracking-widest text-xs uppercase">Email</a>
+                <a href="#" class="hover:text-emerald-500 transition font-bold tracking-widest text-xs uppercase">Twitter</a>
+                <a href="#" class="hover:text-emerald-500 transition font-bold tracking-widest text-xs uppercase">Discord</a>
+            </div>
             <p class="text-gray-700 text-[10px] tracking-[0.4em] uppercase">
                 &copy; 2026 PRISONER1145 INDIE STUDIO.
             </p>
@@ -165,5 +267,3 @@
 
 </body>
 </html>
-
-
