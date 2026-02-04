@@ -64,13 +64,13 @@
             transform: translateY(-2px);
         }
 
-        /* 团队头像特殊效果：黑白滤镜过渡 */
+        /* 团队头像样式：已移除黑白滤镜，改为简单的悬停放大 */
         .team-img {
-            filter: grayscale(100%);
-            transition: all 0.5s ease;
+            /* filter: grayscale(100%);  <-- 已删除此行 */
+            transition: transform 0.5s ease;
         }
         .group:hover .team-img {
-            filter: grayscale(0%);
+            /* filter: grayscale(0%); <-- 已删除此行 */
             transform: scale(1.05);
         }
     </style>
@@ -81,7 +81,7 @@
     <nav class="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="font-gaming text-2xl font-bold tracking-tighter text-emerald-500 flex items-center">
-                <span class="mr-2">◈</span> TEAM_STUDIO
+                <span class="mr-2">◈</span> ZOO
             </div>
             <div class="hidden md:flex space-x-12 text-sm font-medium tracking-widest uppercase text-gray-400">
                 <a href="#home" class="hover:text-emerald-400 transition">首页</a>
@@ -108,7 +108,6 @@
                         浏览游戏
                     </a>
                     <a href="https://store.steampowered.com" target="_blank" class="border border-white/20 hover:bg-white/10 px-10 py-4 rounded-sm font-bold uppercase tracking-widest text-sm transition flex items-center gap-2">
-                        <!-- Steam SVG Icon -->
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
                         STEAM 主页
                     </a>
@@ -116,7 +115,6 @@
             </div>
             <div class="relative hidden md:block">
                 <div class="rounded-2xl border border-white/10 p-4 bg-white/5">
-                    <!-- 这里建议也换成你们的图片 -->
                     <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="Studio" class="rounded-xl opacity-80 grayscale hover:grayscale-0 transition-all duration-700">
                 </div>
             </div>
@@ -131,18 +129,22 @@
         </div>
 
         <div class="grid md:grid-cols-2 gap-12">
-            <!-- 游戏 1 -->
+            <!-- 游戏 1：心缚 (已修改) -->
             <div class="game-card group rounded-3xl">
                 <div class="aspect-video relative overflow-hidden bg-gray-900">
-                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="Core" class="game-img w-full h-full object-cover opacity-60 group-hover:opacity-90">
+                    <!-- 图片已更新为 haibao.jpg -->
+                    <img src="./images/haibao.jpg" alt="心缚" class="game-img w-full h-full object-cover opacity-80 group-hover:opacity-100">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 left-8">
                         <span class="bg-emerald-500 text-black text-[10px] font-black px-3 py-1 rounded-sm uppercase tracking-widest mb-3 inline-block">已发布</span>
-                        <h3 class="text-3xl font-bold font-gaming tracking-tight">心缚 | CORE</h3>
+                        <!-- 标题已更新 -->
+                        <h3 class="text-3xl font-bold font-gaming tracking-tight">心缚 | XIN FU</h3>
                     </div>
                 </div>
                 <div class="p-8">
-                    <p class="text-gray-400 leading-relaxed">这是一款结合了资源管理与快节奏战斗的 roguelike 游戏。玩家将扮演一名失联的星际矿工，在变幻莫测的陨石带中寻求一线生机。</p>
+                    <p class="text-gray-400 leading-relaxed">
+                        这是一款探索心灵边界的独立作品。玩家需要在破碎的记忆中寻找线索，解开束缚心灵的枷锁。
+                    </p>
                 </div>
             </div>
             
@@ -158,7 +160,7 @@
         </div>
     </main>
 
-    <!-- 团队介绍区域 (NEW) -->
+    <!-- 团队介绍区域 -->
     <section id="team" class="max-w-7xl mx-auto px-6 py-32">
         <div class="text-center mb-20">
             <h2 class="font-gaming text-4xl font-bold mb-4 tracking-tighter uppercase">The Squad</h2>
@@ -167,98 +169,107 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-x-8 gap-y-16">
-            
-            <!-- 成员 1: Xie -->
-            <div class="group">
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <!-- 请确保 images 文件夹里有 xie.jpg -->
-                    <img src="./images/xie.jpg" alt="Xie" class="team-img w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <h3 class="font-gaming text-2xl text-white mb-2">XIE</h3>
-                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Core Developer</p>
-                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                    负责游戏核心架构搭建与物理引擎优化。他是团队的代码基石，热衷于在混乱的代码中寻找秩序，经常为了一个 0.01ms 的帧率提升熬夜到天亮。
-                </p>
-            </div>
 
-            <!-- 成员 2: Xu -->
+             <!-- 成员 : 星 -->
             <div class="group">
                 <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/xu.jpg" alt="Xu" class="team-img w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <h3 class="font-gaming text-2xl text-white mb-2">XU</h3>
-                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Lead Artist</p>
-                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                    掌控着整个游戏的视觉风格。从像素点到壮丽的背景原画，每一处色彩都出自他手。他坚信美术不仅是好看，更是游戏叙事的一部分。
-                </p>
-            </div>
-
-            <!-- 成员 3: Me -->
-            <div class="group">
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/me.jpg" alt="Me" class="team-img w-full h-full object-cover">
+                    <img src="./images/me.jpg" alt="星" class="team-img w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <h3 class="font-gaming text-2xl text-white mb-2">ME</h3>
                 <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Producer / Design</p>
                 <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                    团队的粘合剂与方向舵。负责把那些疯狂的想法转化为可玩的游戏机制。擅长在预算有限的情况下，把“不可能”变成“也许可以试一试”。
+                   团队的领航员与程序技术核心。不仅把控着项目的整体进度与方向，协调各部门协作，还亲自上阵解决最棘手的技术难题，是连接梦想与现实的坚实桥梁。
                 </p>
             </div>
+            
+            <!-- 成员 : 谢 -->
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
+                    <img src="./images/xie.jpg" alt="谢" class="team-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <h3 class="font-gaming text-2xl text-white mb-2">XIE</h3>
+                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Core Developer</p>
+                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                    构建游戏世界的底层逻辑。他是代码的守望者，负责将复杂的玩法机制转化为流畅的运行指令，致力于消灭每一个隐藏的 Bug，确保游戏运行坚如磐石。
+                </p>
+            </div>
+
+            <!-- 成员 : 桓 -->
+            <div class="group">
+                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
+                    <img src="./images/xu.jpg" alt="桓" class="team-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <h3 class="font-gaming text-2xl text-white mb-2">XU</h3>
+                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Lead Artist</p>
+                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                    脑洞大开的玩法构筑师。负责设计游戏的核心机制与关卡流程，致力于在挑战与乐趣之间寻找完美的平衡点，确保玩家的每一次交互都充满惊喜与成就感。
+                </p>
+            </div>
+
+           
 
             <!-- 成员 4: Wang -->
             <div class="group">
                 <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/wang.jpg" alt="Wang" class="team-img w-full h-full object-cover">
+                    <img src="./images/wang.jpg" alt="翼" class="team-img w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <h3 class="font-gaming text-2xl text-white mb-2">WANG</h3>
                 <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Sound Engineer</p>
                 <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                    用声音构建世界的人。无论是恢弘的背景音乐还是细微的脚步声，他都能精准捕捉。他的目标是让玩家闭上眼睛也能感受到游戏世界的呼吸。
+                    听觉世界的缔造者。无论是激昂的战斗曲还是细腻的环境音，他都能精准捕捉。他用声音调动玩家的情绪，为游戏注入灵魂，让体验不再止于视觉。
                 </p>
             </div>
 
             <!-- 成员 5: Lin -->
             <div class="group">
                 <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/lin.jpg" alt="Lin" class="team-img w-full h-full object-cover">
+                    <img src="./images/lin.jpg" alt="林" class="team-img w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <h3 class="font-gaming text-2xl text-white mb-2">LIN</h3>
                 <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Level Designer</p>
                 <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                    关卡设计的魔术师。擅长设计精巧的迷宫和富有挑战性的敌人配置。他最喜欢的事情就是看着玩家在精心设计的陷阱前“受苦”并获得成就感。
+                   视觉氛围的魔术师。专注于场景细节与道具资产的设计，用细腻的笔触填补游戏世界的每一个角落，让画面充满故事感，让玩家沉浸于独特的艺术氛围中。
                 </p>
             </div>
 
             <!-- 成员 6: Liu -->
             <div class="group">
                 <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/liu.jpg" alt="Liu" class="team-img w-full h-full object-cover">
+                    <img src="./images/liu.jpg" alt="佚" class="team-img w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <h3 class="font-gaming text-2xl text-white mb-2">LIU</h3>
                 <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">QA / Community</p>
                 <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                    Bug 猎人与社区守护者。他确保游戏上线前消灭尽可能多的错误，并耐心地倾听每一位玩家的反馈。他是连接开发组与玩家之间的重要桥梁。
+                   美术风格的掌舵人。确立游戏的整体视觉基调，从角色原画到最终渲染风格，他严格把控每一帧画面的质量，力求在技术限制下达到极致的艺术表现力。
                 </p>
             </div>
 
         </div>
     </section>
 
-    <!-- 页脚 -->
+    <!-- 页脚：已替换为 QQ 群 -->
     <footer id="join" class="py-20 border-t border-white/5 bg-black">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <h2 class="font-gaming text-2xl font-bold mb-8">CONTACT HUB</h2>
-            <div class="flex justify-center gap-12 mb-16 text-gray-500">
-                <a href="#" class="hover:text-emerald-500 transition font-bold tracking-widest text-xs uppercase">Email</a>
-                <a href="#" class="hover:text-emerald-500 transition font-bold tracking-widest text-xs uppercase">Twitter</a>
-                <a href="#" class="hover:text-emerald-500 transition font-bold tracking-widest text-xs uppercase">Discord</a>
+            <h2 class="font-gaming text-2xl font-bold mb-8">JOIN OUR COMMUNITY</h2>
+            
+            <!-- QQ群 卡片 -->
+            <div class="mb-16">
+                <div class="inline-flex items-center justify-center gap-4 border border-emerald-500/30 bg-emerald-900/10 px-8 py-4 rounded-xl hover:bg-emerald-900/20 transition-all cursor-pointer group">
+                    <!-- QQ Icon SVG -->
+                    <svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                    <div class="text-left">
+                        <div class="text-xs text-emerald-500 font-bold tracking-widest uppercase">官方 QQ 群</div>
+                        <div class="text-2xl font-gaming text-white font-bold group-hover:text-emerald-400 transition-colors">000</div>
+                    </div>
+                </div>
             </div>
+
             <p class="text-gray-700 text-[10px] tracking-[0.4em] uppercase">
                 &copy; 2026 PRISONER1145 INDIE STUDIO.
             </p>
@@ -267,4 +278,3 @@
 
 </body>
 </html>
-
