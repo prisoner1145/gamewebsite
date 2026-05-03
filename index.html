@@ -73,6 +73,181 @@
             /* filter: grayscale(0%); <-- 已删除此行 */
             transform: scale(1.05);
         }
+
+        .mini-game-trigger {
+            display: block;
+            width: 100%;
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .mini-game-trigger:focus-visible {
+            outline: 2px solid #10b981;
+            outline-offset: 4px;
+        }
+
+        .demo-preview {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.12) 1px, transparent 1px),
+                radial-gradient(circle at 50% 40%, rgba(16, 185, 129, 0.22), transparent 34%),
+                #06110e;
+            background-size: 34px 34px, 34px 34px, auto, auto;
+        }
+
+        .demo-ship,
+        .demo-signal,
+        .demo-danger {
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }
+
+        .demo-ship {
+            left: 50%;
+            top: 60%;
+            width: 0;
+            height: 0;
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-bottom: 44px solid #10b981;
+            filter: drop-shadow(0 0 18px rgba(16, 185, 129, 0.82));
+        }
+
+        .demo-signal {
+            width: 22px;
+            height: 22px;
+            background: #34d399;
+            transform: translate(-50%, -50%) rotate(45deg);
+            box-shadow: 0 0 22px rgba(52, 211, 153, 0.86);
+        }
+
+        .demo-danger {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(239, 68, 68, 0.78);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.72);
+        }
+
+        .demo-signal.one { left: 24%; top: 32%; }
+        .demo-signal.two { left: 70%; top: 44%; }
+        .demo-danger.one { left: 38%; top: 24%; }
+        .demo-danger.two { left: 78%; top: 70%; }
+
+        body.game-modal-open { overflow: hidden; }
+
+        .game-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(16px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .game-modal.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .game-modal__panel {
+            width: min(1120px, 100%);
+            max-height: min(760px, 92vh);
+            border: 1px solid rgba(16, 185, 129, 0.32);
+            background: #050505;
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.72);
+            overflow: hidden;
+        }
+
+        .game-modal__bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .game-modal__title {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .game-modal__label {
+            margin: 0 0 6px;
+            color: #10b981;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+        }
+
+        .game-modal__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .game-modal__button {
+            min-height: 38px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            padding: 0 14px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .game-modal__button:hover,
+        .game-modal__button:focus-visible {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.12);
+            outline: none;
+        }
+
+        .game-modal iframe {
+            display: block;
+            width: 100%;
+            height: min(650px, calc(92vh - 72px));
+            border: 0;
+            background: #050505;
+        }
+
+        @media (max-width: 640px) {
+            .game-modal {
+                padding: 0;
+            }
+
+            .game-modal__panel {
+                width: 100%;
+                height: 100vh;
+                max-height: none;
+                border-left: 0;
+                border-right: 0;
+            }
+
+            .game-modal__bar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .game-modal iframe {
+                height: calc(100vh - 114px);
+            }
+        }
     </style>
 </head>
 <body class="selection:bg-emerald-500 selection:text-white">
@@ -157,6 +332,29 @@
                     <p class="text-gray-400 leading-relaxed">下一款革命性的作品正在紧锣密鼓地开发中，敬请期待。</p>
                 </div>
             </div>
+
+            <button type="button" class="game-card group rounded-3xl mini-game-trigger" data-open-mini-game aria-haspopup="dialog" aria-controls="mini-game-modal">
+                <div class="aspect-video relative overflow-hidden bg-gray-900">
+                    <div class="demo-preview">
+                        <span class="demo-signal one"></span>
+                        <span class="demo-signal two"></span>
+                        <span class="demo-danger one"></span>
+                        <span class="demo-danger two"></span>
+                        <span class="demo-ship"></span>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    <div class="absolute bottom-6 left-8 right-8">
+                        <span class="bg-emerald-500 text-black text-[10px] font-black px-3 py-1 rounded-sm uppercase tracking-widest mb-3 inline-block">Web Demo</span>
+                        <h3 class="text-3xl font-bold font-gaming tracking-tight">Signal Run | PLAY</h3>
+                    </div>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-400 leading-relaxed">
+                        一个可以直接在网页里玩的小游戏窗口。收集绿色信号、躲开红色故障块，点击这张卡片即可开始试玩。
+                    </p>
+                    <span class="mt-6 inline-flex text-sm font-bold tracking-widest uppercase text-emerald-400">Click to launch</span>
+                </div>
+            </button>
         </div>
     </main>
 
@@ -277,6 +475,70 @@
             </p>
         </div>
     </footer>
+
+    <div id="mini-game-modal" class="game-modal" aria-hidden="true">
+        <div class="game-modal__panel" role="dialog" aria-modal="true" aria-label="Signal Run playable mini game">
+            <div class="game-modal__bar">
+                <div>
+                    <p class="game-modal__label">Playable Mini Game</p>
+                    <h2 class="game-modal__title font-gaming">Signal Run</h2>
+                </div>
+                <div class="game-modal__actions">
+                    <a class="game-modal__button inline-flex items-center" href="./mini-game.html" target="_blank" rel="noopener">新窗口打开</a>
+                    <button type="button" class="game-modal__button" data-close-mini-game>关闭</button>
+                </div>
+            </div>
+            <iframe id="mini-game-frame" title="Signal Run playable mini game" data-src="./mini-game.html" allow="gamepad"></iframe>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            const modal = document.getElementById("mini-game-modal");
+            const frame = document.getElementById("mini-game-frame");
+            const openButtons = document.querySelectorAll("[data-open-mini-game]");
+            const closeButtons = modal ? modal.querySelectorAll("[data-close-mini-game]") : [];
+            let activeTrigger = null;
+
+            if (!modal || !frame || openButtons.length === 0) return;
+
+            const openGame = (trigger) => {
+                activeTrigger = trigger;
+                if (!frame.getAttribute("src")) frame.setAttribute("src", frame.dataset.src);
+                modal.classList.add("is-open");
+                modal.setAttribute("aria-hidden", "false");
+                document.body.classList.add("game-modal-open");
+                closeButtons[0]?.focus({ preventScroll: true });
+            };
+
+            const closeGame = () => {
+                modal.classList.remove("is-open");
+                modal.setAttribute("aria-hidden", "true");
+                document.body.classList.remove("game-modal-open");
+                activeTrigger?.focus({ preventScroll: true });
+            };
+
+            openButtons.forEach((button) => {
+                button.addEventListener("click", () => openGame(button));
+            });
+
+            closeButtons.forEach((button) => {
+                button.addEventListener("click", closeGame);
+            });
+
+            modal.addEventListener("click", (event) => {
+                if (event.target === modal) closeGame();
+            });
+
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape" && modal.classList.contains("is-open")) closeGame();
+            });
+
+            window.addEventListener("message", (event) => {
+                if (event.data?.type === "zoo-mini-game-close" && modal.classList.contains("is-open")) closeGame();
+            });
+        })();
+    </script>
 
 </body>
 </html>

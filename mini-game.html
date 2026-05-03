@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZOO Mini Game | Signal Run</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --panel: rgba(8, 14, 18, 0.86);
+            --line: rgba(255, 255, 255, 0.12);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --gold: #fbbf24;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.16), transparent 32%),
+                        radial-gradient(circle at 12% 72%, rgba(59, 130, 246, 0.12), transparent 30%),
+                        var(--bg);
+            color: var(--text);
+            font-family: Inter, "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            overflow-x: hidden;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        button {
+            border: 0;
+            font: inherit;
+        }
+
+        .game-shell {
+            width: min(1080px, 100%);
+            border: 1px solid var(--line);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
+            overflow: hidden;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(0, 0, 0, 0.42);
+        }
+
+        .brand {
+            display: grid;
+            gap: 4px;
+        }
+
+        .eyebrow {
+            margin: 0;
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(24px, 4vw, 40px);
+            line-height: 1;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(86px, 1fr));
+            gap: 8px;
+            width: min(420px, 100%);
+        }
+
+        .stat {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 10px 12px;
+        }
+
+        .stat span {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .stat strong {
+            display: block;
+            margin-top: 4px;
+            color: var(--text);
+            font-size: 20px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stage-wrap {
+            position: relative;
+            background: #020403;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            aspect-ratio: 900 / 520;
+            background: #030706;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .start-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.72));
+            transition: opacity 180ms ease, visibility 180ms ease;
+        }
+
+        .start-overlay.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .intro-card {
+            width: min(520px, 100%);
+            border: 1px solid rgba(16, 185, 129, 0.28);
+            background: rgba(3, 8, 10, 0.86);
+            padding: 28px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.12);
+        }
+
+        .intro-card h2 {
+            margin: 0 0 12px;
+            font-size: clamp(26px, 5vw, 44px);
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .intro-card p {
+            margin: 0 auto 20px;
+            max-width: 420px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 16px 20px 18px;
+            border-top: 1px solid var(--line);
+            background: rgba(0, 0, 0, 0.42);
+        }
+
+        .hint {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            min-height: 42px;
+            padding: 0 18px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text);
+            cursor: pointer;
+            transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+        }
+
+        .btn:hover,
+        .btn:focus-visible {
+            transform: translateY(-1px);
+            border-color: rgba(16, 185, 129, 0.7);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #00140d;
+            font-weight: 900;
+        }
+
+        .status {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        @media (max-width: 720px) {
+            body {
+                padding: 0;
+            }
+
+            .game-shell {
+                min-height: 100vh;
+                border-left: 0;
+                border-right: 0;
+            }
+
+            .topbar {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+                width: 100%;
+            }
+
+            .stat {
+                padding: 8px;
+            }
+
+            .stat strong {
+                font-size: 18px;
+            }
+
+            .controls {
+                align-items: stretch;
+            }
+
+            .actions,
+            .actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="game-shell" aria-label="Signal Run mini game">
+        <header class="topbar">
+            <div class="brand">
+                <p class="eyebrow">ZOO Studio Arcade</p>
+                <h1>Signal Run</h1>
+            </div>
+            <div class="stats" aria-live="polite">
+                <div class="stat">
+                    <span>Score</span>
+                    <strong id="score">0</strong>
+                </div>
+                <div class="stat">
+                    <span>Lives</span>
+                    <strong id="lives">3</strong>
+                </div>
+                <div class="stat">
+                    <span>Time</span>
+                    <strong id="time">45</strong>
+                </div>
+            </div>
+        </header>
+
+        <section class="stage-wrap">
+            <canvas id="game" width="900" height="520" tabindex="0" aria-label="Signal Run play field"></canvas>
+            <div id="startOverlay" class="start-overlay">
+                <div class="intro-card">
+                    <p class="eyebrow">Playable Web Demo</p>
+                    <h2>Collect Signals</h2>
+                    <p>收集绿色信号，避开红色故障块。键盘、鼠标和触屏都可以玩，45 秒内尽量拿高分。</p>
+                    <button id="startGame" class="btn btn-primary" type="button">开始游戏</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="controls">
+            <p class="hint">
+                <span class="status" id="status">Ready.</span>
+                使用 WASD / 方向键移动，也可以按住画面拖动飞行器。
+            </p>
+            <div class="actions">
+                <button id="pauseGame" class="btn" type="button">暂停</button>
+                <button id="restartGame" class="btn" type="button">重新开始</button>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        (() => {
+            const canvas = document.getElementById("game");
+            const ctx = canvas.getContext("2d");
+            const scoreEl = document.getElementById("score");
+            const livesEl = document.getElementById("lives");
+            const timeEl = document.getElementById("time");
+            const statusEl = document.getElementById("status");
+            const startOverlay = document.getElementById("startOverlay");
+            const startButton = document.getElementById("startGame");
+            const pauseButton = document.getElementById("pauseGame");
+            const restartButton = document.getElementById("restartGame");
+
+            const width = 900;
+            const height = 520;
+            const keys = new Set();
+            const hazards = [];
+            const signals = [];
+            const sparks = [];
+            const stars = Array.from({ length: 80 }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                r: Math.random() * 1.8 + 0.4,
+                a: Math.random() * 0.5 + 0.2
+            }));
+
+            let score = 0;
+            let lives = 3;
+            let timeLeft = 45;
+            let running = false;
+            let paused = false;
+            let ended = false;
+            let lastTime = 0;
+            let hazardTimer = 0;
+            let signalTimer = 0;
+            let hitCooldown = 0;
+            let pointerTarget = null;
+
+            const player = {
+                x: width / 2,
+                y: height - 82,
+                radius: 16,
+                speed: 255
+            };
+
+            function setHud() {
+                scoreEl.textContent = String(score);
+                livesEl.textContent = String(lives);
+                timeEl.textContent = String(Math.max(0, Math.ceil(timeLeft)));
+            }
+
+            function resetGame(autostart = true) {
+                score = 0;
+                lives = 3;
+                timeLeft = 45;
+                running = autostart;
+                paused = false;
+                ended = false;
+                hazardTimer = 0;
+                signalTimer = 0;
+                hitCooldown = 0;
+                pointerTarget = null;
+                player.x = width / 2;
+                player.y = height - 82;
+                hazards.length = 0;
+                signals.length = 0;
+                sparks.length = 0;
+                signals.push({
+                    x: width / 2,
+                    y: height - 150,
+                    radius: 13,
+                    phase: 0
+                });
+                for (let i = 0; i < 4; i += 1) spawnSignal();
+                for (let i = 0; i < 3; i += 1) spawnHazard(true);
+                statusEl.textContent = autostart ? "Signal online." : "Ready.";
+                pauseButton.textContent = "暂停";
+                startOverlay.classList.toggle("is-hidden", autostart);
+                setHud();
+            }
+
+            function startGame() {
+                resetGame(true);
+                canvas.focus();
+            }
+
+            function endGame(message) {
+                ended = true;
+                running = false;
+                paused = false;
+                statusEl.textContent = message;
+                startOverlay.classList.remove("is-hidden");
+                startOverlay.querySelector("h2").textContent = message === "Mission complete." ? "Mission Complete" : "Signal Lost";
+                startOverlay.querySelector("p:not(.eyebrow)").textContent = `最终得分 ${score}。点击开始游戏再来一局。`;
+                startButton.textContent = "再玩一次";
+            }
+
+            function spawnSignal() {
+                signals.push({
+                    x: 40 + Math.random() * (width - 80),
+                    y: 54 + Math.random() * (height - 130),
+                    radius: 10 + Math.random() * 4,
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+
+            function spawnHazard(fromTop = false) {
+                const size = 28 + Math.random() * 28;
+                const speed = 82 + Math.random() * 110 + Math.max(0, 45 - timeLeft) * 1.4;
+                hazards.push({
+                    x: Math.random() * (width - size),
+                    y: fromTop ? Math.random() * height * 0.55 : -size - 12,
+                    size,
+                    speed,
+                    drift: (Math.random() - 0.5) * 70,
+                    spin: (Math.random() - 0.5) * 2
+                });
+            }
+
+            function burst(x, y, color, count = 12) {
+                for (let i = 0; i < count; i += 1) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 60 + Math.random() * 160;
+                    sparks.push({
+                        x,
+                        y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        life: 0.45 + Math.random() * 0.35,
+                        color
+                    });
+                }
+            }
+
+            function clamp(value, min, max) {
+                return Math.max(min, Math.min(max, value));
+            }
+
+            function circleRectCollision(circle, rect) {
+                const closestX = clamp(circle.x, rect.x, rect.x + rect.size);
+                const closestY = clamp(circle.y, rect.y, rect.y + rect.size);
+                const dx = circle.x - closestX;
+                const dy = circle.y - closestY;
+                return dx * dx + dy * dy < circle.radius * circle.radius;
+            }
+
+            function updatePlayer(dt) {
+                let vx = 0;
+                let vy = 0;
+
+                if (keys.has("arrowleft") || keys.has("a")) vx -= 1;
+                if (keys.has("arrowright") || keys.has("d")) vx += 1;
+                if (keys.has("arrowup") || keys.has("w")) vy -= 1;
+                if (keys.has("arrowdown") || keys.has("s")) vy += 1;
+
+                if (vx || vy) {
+                    const length = Math.hypot(vx, vy);
+                    player.x += (vx / length) * player.speed * dt;
+                    player.y += (vy / length) * player.speed * dt;
+                } else if (pointerTarget) {
+                    const dx = pointerTarget.x - player.x;
+                    const dy = pointerTarget.y - player.y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist > 2) {
+                        const step = Math.min(dist, player.speed * 1.35 * dt);
+                        player.x += (dx / dist) * step;
+                        player.y += (dy / dist) * step;
+                    }
+                }
+
+                player.x = clamp(player.x, player.radius, width - player.radius);
+                player.y = clamp(player.y, player.radius, height - player.radius);
+            }
+
+            function update(dt) {
+                if (!running || paused || ended) return;
+
+                timeLeft -= dt;
+                hitCooldown = Math.max(0, hitCooldown - dt);
+                hazardTimer -= dt;
+                signalTimer -= dt;
+
+                updatePlayer(dt);
+
+                if (hazardTimer <= 0) {
+                    spawnHazard();
+                    hazardTimer = Math.max(0.28, 0.95 - Math.max(0, 45 - timeLeft) * 0.012);
+                }
+
+                if (signalTimer <= 0 && signals.length < 8) {
+                    spawnSignal();
+                    signalTimer = 1.15;
+                }
+
+                for (let i = hazards.length - 1; i >= 0; i -= 1) {
+                    const h = hazards[i];
+                    h.y += h.speed * dt;
+                    h.x += Math.sin((performance.now() / 650) * h.spin + h.y * 0.01) * h.drift * dt;
+                    if (h.y > height + h.size) hazards.splice(i, 1);
+                    if (hitCooldown <= 0 && circleRectCollision(player, h)) {
+                        lives -= 1;
+                        hitCooldown = 1;
+                        burst(player.x, player.y, "rgba(239, 68, 68, 0.95)", 24);
+                        statusEl.textContent = lives > 0 ? "Hull hit." : "Signal lost.";
+                        if (lives <= 0) endGame("Signal lost.");
+                    }
+                }
+
+                for (let i = signals.length - 1; i >= 0; i -= 1) {
+                    const s = signals[i];
+                    const dist = Math.hypot(player.x - s.x, player.y - s.y);
+                    if (dist < player.radius + s.radius) {
+                        signals.splice(i, 1);
+                        score += 10;
+                        burst(s.x, s.y, "rgba(16, 185, 129, 0.95)", 18);
+                        statusEl.textContent = "Signal captured.";
+                        spawnSignal();
+                    }
+                }
+
+                for (let i = sparks.length - 1; i >= 0; i -= 1) {
+                    const p = sparks[i];
+                    p.life -= dt;
+                    p.x += p.vx * dt;
+                    p.y += p.vy * dt;
+                    p.vx *= 0.98;
+                    p.vy *= 0.98;
+                    if (p.life <= 0) sparks.splice(i, 1);
+                }
+
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                    endGame("Mission complete.");
+                }
+
+                setHud();
+            }
+
+            function drawGrid() {
+                ctx.save();
+                ctx.strokeStyle = "rgba(16, 185, 129, 0.08)";
+                ctx.lineWidth = 1;
+                for (let x = 0; x <= width; x += 45) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, height);
+                    ctx.stroke();
+                }
+                for (let y = 0; y <= height; y += 45) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(width, y);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            function drawPlayer() {
+                ctx.save();
+                ctx.translate(player.x, player.y);
+                ctx.globalAlpha = hitCooldown > 0 ? 0.55 + Math.sin(performance.now() / 45) * 0.25 : 1;
+                ctx.shadowColor = "rgba(16, 185, 129, 0.9)";
+                ctx.shadowBlur = 24;
+                ctx.fillStyle = "#10b981";
+                ctx.beginPath();
+                ctx.moveTo(0, -21);
+                ctx.lineTo(17, 18);
+                ctx.lineTo(0, 10);
+                ctx.lineTo(-17, 18);
+                ctx.closePath();
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = "#d1fae5";
+                ctx.fillRect(-4, 0, 8, 12);
+                ctx.restore();
+            }
+
+            function draw() {
+                const gradient = ctx.createLinearGradient(0, 0, width, height);
+                gradient.addColorStop(0, "#020403");
+                gradient.addColorStop(0.52, "#06110e");
+                gradient.addColorStop(1, "#020304");
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+
+                for (const star of stars) {
+                    ctx.fillStyle = `rgba(226, 232, 240, ${star.a})`;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                drawGrid();
+
+                for (const s of signals) {
+                    const pulse = Math.sin(performance.now() / 180 + s.phase) * 0.25 + 0.75;
+                    ctx.save();
+                    ctx.translate(s.x, s.y);
+                    ctx.rotate(Math.PI / 4);
+                    ctx.shadowColor = "rgba(16, 185, 129, 0.9)";
+                    ctx.shadowBlur = 20;
+                    ctx.fillStyle = `rgba(16, 185, 129, ${pulse})`;
+                    ctx.fillRect(-s.radius, -s.radius, s.radius * 2, s.radius * 2);
+                    ctx.restore();
+                }
+
+                for (const h of hazards) {
+                    ctx.save();
+                    ctx.translate(h.x + h.size / 2, h.y + h.size / 2);
+                    ctx.rotate((performance.now() / 800) * h.spin);
+                    ctx.shadowColor = "rgba(239, 68, 68, 0.75)";
+                    ctx.shadowBlur = 18;
+                    ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
+                    ctx.fillStyle = "rgba(239, 68, 68, 0.78)";
+                    ctx.fillRect(-h.size / 2, -h.size / 2, h.size, h.size);
+                    ctx.strokeRect(-h.size / 2, -h.size / 2, h.size, h.size);
+                    ctx.restore();
+                }
+
+                for (const p of sparks) {
+                    ctx.fillStyle = p.color.replace("0.95", String(Math.max(0, p.life)));
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                drawPlayer();
+            }
+
+            function frame(now) {
+                const dt = Math.min(0.032, (now - lastTime) / 1000 || 0);
+                lastTime = now;
+                update(dt);
+                draw();
+                requestAnimationFrame(frame);
+            }
+
+            function pointerToCanvas(event) {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: ((event.clientX - rect.left) / rect.width) * width,
+                    y: ((event.clientY - rect.top) / rect.height) * height
+                };
+            }
+
+            window.addEventListener("keydown", (event) => {
+                const key = event.key.toLowerCase();
+                if (key === "escape") {
+                    window.parent?.postMessage({ type: "zoo-mini-game-close" }, "*");
+                    return;
+                }
+                if (["arrowleft", "arrowright", "arrowup", "arrowdown", "a", "d", "w", "s", " "].includes(key)) {
+                    event.preventDefault();
+                }
+                if (key === " ") {
+                    if (!running || ended) startGame();
+                    else pauseButton.click();
+                    return;
+                }
+                keys.add(key);
+            });
+
+            window.addEventListener("keyup", (event) => {
+                keys.delete(event.key.toLowerCase());
+            });
+
+            canvas.addEventListener("pointerdown", (event) => {
+                pointerTarget = pointerToCanvas(event);
+                canvas.setPointerCapture(event.pointerId);
+                if (!running || ended) startGame();
+            });
+
+            canvas.addEventListener("pointermove", (event) => {
+                if (event.pressure > 0 || event.buttons > 0) pointerTarget = pointerToCanvas(event);
+            });
+
+            canvas.addEventListener("pointerup", () => {
+                pointerTarget = null;
+            });
+
+            startButton.addEventListener("click", startGame);
+            restartButton.addEventListener("click", startGame);
+            pauseButton.addEventListener("click", () => {
+                if (!running || ended) return;
+                paused = !paused;
+                pauseButton.textContent = paused ? "继续" : "暂停";
+                statusEl.textContent = paused ? "Paused." : "Signal online.";
+            });
+
+            resetGame(false);
+            requestAnimationFrame(frame);
+        })();
+    </script>
+</body>
+</html>
