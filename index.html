@@ -3,478 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZOO工作室 | 我们的团队</title>
-    <!-- 引入 Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <style>
-        /* 引入字体 */
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
-        
-        body { 
-            font-family: 'Noto Sans SC', sans-serif; 
-            background-color: #050505; 
-            color: #ffffff;
-            scroll-behavior: smooth;
-        }
-
-        .font-gaming { font-family: 'Orbitron', sans-serif; }
-
-        .hero-gradient {
-            background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #050505 100%);
-        }
-
-        /* 游戏卡片样式 */
-        .game-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(255, 255, 255, 0.02);
-            overflow: hidden;
-        }
-        .game-card:hover {
-            transform: scale(1.02);
-            border-color: #10b981;
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
-        }
-        .game-card:hover .game-img { transform: scale(1.1); }
-        .game-img { transition: transform 0.6s ease; }
-
-        /* 扫描线效果 */
-        .scanlines { position: relative; overflow: hidden; }
-        .scanlines::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-            z-index: 2;
-            background-size: 100% 4px, 3px 100%;
-            pointer-events: none;
-        }
-
-        /* 按钮样式 */
-        .btn-primary {
-            background: #10b981;
-            color: #000;
-            transition: all 0.3s;
-        }
-        .btn-primary:hover {
-            background: #059669;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-            transform: translateY(-2px);
-        }
-
-        /* 团队头像样式：已移除黑白滤镜，改为简单的悬停放大 */
-        .team-img {
-            /* filter: grayscale(100%);  <-- 已删除此行 */
-            transition: transform 0.5s ease;
-        }
-        .group:hover .team-img {
-            /* filter: grayscale(0%); <-- 已删除此行 */
-            transform: scale(1.05);
-        }
-
-        .mini-game-trigger {
-            display: block;
-            width: 100%;
-            color: inherit;
-            text-align: left;
-            cursor: pointer;
-        }
-
-        .mini-game-trigger:focus-visible {
-            outline: 2px solid #10b981;
-            outline-offset: 4px;
-        }
-
-        .demo-preview {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background:
-                linear-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(16, 185, 129, 0.12) 1px, transparent 1px),
-                radial-gradient(circle at 50% 40%, rgba(16, 185, 129, 0.22), transparent 34%),
-                #06110e;
-            background-size: 34px 34px, 34px 34px, auto, auto;
-        }
-
-        .demo-ship,
-        .demo-signal,
-        .demo-danger {
-            position: absolute;
-            transform: translate(-50%, -50%);
-        }
-
-        .demo-ship {
-            left: 50%;
-            top: 60%;
-            width: 0;
-            height: 0;
-            border-left: 18px solid transparent;
-            border-right: 18px solid transparent;
-            border-bottom: 44px solid #10b981;
-            filter: drop-shadow(0 0 18px rgba(16, 185, 129, 0.82));
-        }
-
-        .demo-signal {
-            width: 22px;
-            height: 22px;
-            background: #34d399;
-            transform: translate(-50%, -50%) rotate(45deg);
-            box-shadow: 0 0 22px rgba(52, 211, 153, 0.86);
-        }
-
-        .demo-danger {
-            width: 36px;
-            height: 36px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            background: rgba(239, 68, 68, 0.78);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.72);
-        }
-
-        .demo-signal.one { left: 24%; top: 32%; }
-        .demo-signal.two { left: 70%; top: 44%; }
-        .demo-danger.one { left: 38%; top: 24%; }
-        .demo-danger.two { left: 78%; top: 70%; }
-
-        body.game-modal-open { overflow: hidden; }
-
-        .game-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 80;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            background: rgba(0, 0, 0, 0.78);
-            backdrop-filter: blur(16px);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.25s ease;
-        }
-
-        .game-modal.is-open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .game-modal__panel {
-            width: min(1120px, 100%);
-            max-height: min(760px, 92vh);
-            border: 1px solid rgba(16, 185, 129, 0.32);
-            background: #050505;
-            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.72);
-            overflow: hidden;
-        }
-
-        .game-modal__bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 16px 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .game-modal__title {
-            margin: 0;
-            font-size: 18px;
-            line-height: 1;
-        }
-
-        .game-modal__label {
-            margin: 0 0 6px;
-            color: #10b981;
-            font-size: 10px;
-            font-weight: 900;
-            letter-spacing: 0.26em;
-            text-transform: uppercase;
-        }
-
-        .game-modal__actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .game-modal__button {
-            min-height: 38px;
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            background: rgba(255, 255, 255, 0.06);
-            color: #fff;
-            padding: 0 14px;
-            font-size: 13px;
-            font-weight: 700;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .game-modal__button:hover,
-        .game-modal__button:focus-visible {
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.12);
-            outline: none;
-        }
-
-        .game-modal iframe {
-            display: block;
-            width: 100%;
-            height: min(650px, calc(92vh - 72px));
-            border: 0;
-            background: #050505;
-        }
-
-        @media (max-width: 640px) {
-            .game-modal {
-                padding: 0;
-            }
-
-            .game-modal__panel {
-                width: 100%;
-                height: 100vh;
-                max-height: none;
-                border-left: 0;
-                border-right: 0;
-            }
-
-            .game-modal__bar {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .game-modal iframe {
-                height: calc(100vh - 114px);
-            }
-        }
-    </style>
+    <title>ZOO 工作室 | 独立游戏团队</title>
+    <link rel="stylesheet" href="./css/site.css">
 </head>
-<body class="selection:bg-emerald-500 selection:text-white">
-
-    <!-- 导航栏 -->
-    <nav class="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="font-gaming text-2xl font-bold tracking-tighter text-emerald-500 flex items-center">
-                <span class="mr-2">◈</span> ZOO
+<body>
+    <div class="site-shell">
+        <header class="site-header">
+            <div class="site-header__inner">
+                <a class="brand" href="#home"><span class="brand-mark"></span>ZOO</a>
+                <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">菜单</button>
+                <nav class="site-nav" data-site-nav>
+                    <a href="#home">首页</a>
+                    <a href="#games">作品库</a>
+                    <a href="#about">关于我们</a>
+                    <a href="#team">团队</a>
+                    <a href="#media">媒体库</a>
+                    <a href="#community">社区</a>
+                </nav>
             </div>
-            <div class="hidden md:flex space-x-12 text-sm font-medium tracking-widest uppercase text-gray-400">
-                <a href="#home" class="hover:text-emerald-400 transition">首页</a>
-                <a href="#games" class="hover:text-emerald-400 transition">游戏库</a>
-                <a href="#team" class="hover:text-emerald-400 transition text-emerald-500">团队</a>
-                <a href="#join" class="hover:text-emerald-400 transition">加入我们</a>
-            </div>
-        </div>
-    </nav>
+        </header>
 
-    <!-- 核心展示区域 (Hero Section) -->
-    <section id="home" class="hero-gradient min-h-screen flex items-center pt-20">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-            <div class="scanlines p-4">
-                <h2 class="font-gaming text-emerald-500 font-bold mb-4 tracking-[0.3em] uppercase">Indie Game Dev Team</h2>
-                <h1 class="text-6xl md:text-8xl font-bold mb-8 leading-none tracking-tighter">
-                    用想象力 <br/>重塑 <span class="text-emerald-500 italic">现实</span>
-                </h1>
-                <p class="text-gray-400 text-xl mb-10 leading-relaxed max-w-lg">
-                    我们是一个追求纯粹乐趣的独立游戏团队。不随波逐流，只为打造那些能被玩家铭记的独特体验。
-                </p>
-                <div class="flex flex-wrap gap-6">
-                    <a href="#games" class="btn-primary px-10 py-4 rounded-sm font-bold uppercase tracking-widest text-sm">
-                        浏览游戏
-                    </a>
-                    <a href="https://store.steampowered.com" target="_blank" class="border border-white/20 hover:bg-white/10 px-10 py-4 rounded-sm font-bold uppercase tracking-widest text-sm transition flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-                        STEAM 主页
-                    </a>
-                </div>
-            </div>
-            <div class="relative hidden md:block">
-                <div class="rounded-2xl border border-white/10 p-4 bg-white/5">
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="Studio" class="rounded-xl opacity-80 grayscale hover:grayscale-0 transition-all duration-700">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 游戏库区域 -->
-    <main id="games" class="max-w-7xl mx-auto px-6 py-32 border-b border-white/5">
-        <div class="text-center mb-20">
-            <h2 class="font-gaming text-4xl font-bold mb-4 tracking-tighter uppercase">Selected Works</h2>
-            <div class="w-20 h-1 bg-emerald-500 mx-auto"></div>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-12">
-            <!-- 游戏 1：心缚 (已修改) -->
-            <div class="game-card group rounded-3xl">
-                <div class="aspect-video relative overflow-hidden bg-gray-900">
-                    <!-- 图片已更新为 haibao.jpg -->
-                    <img src="./images/haibao.jpg" alt="心缚" class="game-img w-full h-full object-cover opacity-80 group-hover:opacity-100">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    <div class="absolute bottom-6 left-8">
-                        <span class="bg-emerald-500 text-black text-[10px] font-black px-3 py-1 rounded-sm uppercase tracking-widest mb-3 inline-block">已发布</span>
-                        <!-- 标题已更新 -->
-                        <h3 class="text-3xl font-bold font-gaming tracking-tight">心缚 | XIN FU</h3>
+        <main class="page-main">
+            <section id="home" class="page-hero integrated-hero">
+                <div data-reveal>
+                    <p class="hero-kicker">Indie Game Dev Team</p>
+                    <h1 class="page-title">用想象力<br><span>重塑现实</span></h1>
+                    <p class="page-copy">我们是一个追求纯粹乐趣的独立游戏团队。不随波逐流，只为打造那些能被玩家铭记的独特体验。</p>
+                    <div class="hero-actions">
+                        <a class="button button--primary" href="#games">浏览作品</a>
+                        <button class="button button--outline" type="button" data-open-mini-game>试玩小游戏</button>
+                        <a class="button button--text" href="https://store.steampowered.com" target="_blank" rel="noopener">Steam 主页 →</a>
                     </div>
                 </div>
-                <div class="p-8">
-                    <p class="text-gray-400 leading-relaxed">
-                        这是一款探索心灵边界的独立作品。玩家需要在破碎的记忆中寻找线索，解开束缚心灵的枷锁。
-                    </p>
-                </div>
-            </div>
-            
-            <!-- 游戏 2 (占位) -->
-            <div class="game-card group rounded-3xl">
-                <div class="aspect-video relative overflow-hidden bg-gray-900">
-                    <div class="w-full h-full flex items-center justify-center text-gray-700 font-gaming">COMING SOON</div>
-                </div>
-                <div class="p-8">
-                    <p class="text-gray-400 leading-relaxed">下一款革命性的作品正在紧锣密鼓地开发中，敬请期待。</p>
-                </div>
-            </div>
-
-            <button type="button" class="game-card group rounded-3xl mini-game-trigger" data-open-mini-game aria-haspopup="dialog" aria-controls="mini-game-modal">
-                <div class="aspect-video relative overflow-hidden bg-gray-900">
-                    <div class="demo-preview">
-                        <span class="demo-signal one"></span>
-                        <span class="demo-signal two"></span>
-                        <span class="demo-danger one"></span>
-                        <span class="demo-danger two"></span>
-                        <span class="demo-ship"></span>
+                <aside class="hero-panel" data-reveal>
+                    <div class="command-screen" aria-label="ZOO studio status panel">
+                        <div class="screen-row"><strong>STUDIO</strong><span>ZOO 独立游戏工作室</span><span class="signal">ONLINE</span></div>
+                        <div class="screen-row"><strong>MAIN GAME</strong><span>心缚 | XIN FU</span><span class="signal">LIVE</span></div>
+                        <div class="screen-row"><strong>WEB DEMO</strong><span>Signal Run 浏览器小游戏</span><span class="signal">READY</span></div>
+                        <div class="screen-row"><strong>TEAM</strong><span>程序、策划、美术、声音协作</span><span>6 ROLES</span></div>
+                        <div class="screen-row"><strong>COMMUNITY</strong><span>反馈、订阅、玩家留言</span><span class="signal">OPEN</span></div>
                     </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    <div class="absolute bottom-6 left-8 right-8">
-                        <span class="bg-emerald-500 text-black text-[10px] font-black px-3 py-1 rounded-sm uppercase tracking-widest mb-3 inline-block">Web Demo</span>
-                        <h3 class="text-3xl font-bold font-gaming tracking-tight">Signal Run | PLAY</h3>
+                </aside>
+            </section>
+
+            <section id="games" class="section" data-filter-scope>
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker">Selected Works</p>
+                        <h2 class="section-title">作品库</h2>
+                    </div>
+                    <p class="section-copy">这里合并原本的作品介绍和新增的网页试玩内容。玩家不用离开首页，就能了解作品状态并打开小游戏窗口。</p>
+                </div>
+                <div class="filter-row">
+                    <button class="chip is-active" type="button" data-filter="all">全部</button>
+                    <button class="chip" type="button" data-filter="released">已发布</button>
+                    <button class="chip" type="button" data-filter="playable">可试玩</button>
+                    <button class="chip" type="button" data-filter="prototype">开发中</button>
+                </div>
+                <div class="grid grid--3" style="margin-top: 24px;">
+                    <article class="card" data-filter-item data-tags="released story puzzle" data-reveal>
+                        <div class="card__media"><img src="./images/haibao.jpg" alt="心缚游戏海报"></div>
+                        <div class="meta"><span class="tag">已发布</span><span class="tag">剧情解谜</span></div>
+                        <h3>心缚 | XIN FU</h3>
+                        <p>这是一款探索心灵边界的独立作品。玩家需要在破碎的记忆中寻找线索，解开束缚心灵的枷锁。</p>
+                        <div class="progress"><span style="width: 100%;"></span></div>
+                    </article>
+
+                    <article class="card" data-filter-item data-tags="playable arcade web" data-reveal>
+                        <div class="play-preview" aria-hidden="true">
+                            <span class="play-preview__signal one"></span>
+                            <span class="play-preview__signal two"></span>
+                            <span class="play-preview__danger one"></span>
+                            <span class="play-preview__danger two"></span>
+                            <span class="play-preview__ship"></span>
+                        </div>
+                        <div class="meta"><span class="tag">可试玩</span><span class="tag">Web Demo</span></div>
+                        <h3>Signal Run</h3>
+                        <p>一个可以直接在网页里玩的小游戏。收集绿色信号、躲开红色故障块，适合作为官网互动彩蛋。</p>
+                        <div class="section-actions"><button class="button button--primary" type="button" data-open-mini-game>打开试玩窗口</button></div>
+                    </article>
+
+                    <article class="card" data-filter-item data-tags="prototype" data-reveal>
+                        <div class="meta"><span class="tag">开发中</span><span class="tag">Coming Soon</span></div>
+                        <h3>下一款作品</h3>
+                        <p>下一款革命性的作品正在紧锣密鼓地开发中。这里保留项目槽位，方便后续替换为真实截图、商店链接和开发进度。</p>
+                        <div class="progress"><span style="width: 32%;"></span></div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="about" class="section">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker">About Us</p>
+                        <h2 class="section-title">关于我们</h2>
+                    </div>
+                    <p class="section-copy">这一栏承接原介绍页的核心内容：团队气质、创作方向和对独立游戏体验的追求。</p>
+                </div>
+                <div class="grid grid--2">
+                    <article class="feature-panel about-panel" data-reveal>
+                        <h3>不随波逐流，只做能被记住的体验。</h3>
+                        <p>我们希望把想象力变成玩家能亲手触碰的互动体验。每一次关卡设计、音效处理和视觉构图，都服务于一个目标：让玩家在游玩后仍然记得那一刻。</p>
+                    </article>
+                    <article class="feature-panel about-panel" data-reveal>
+                        <h3>小团队，高协作。</h3>
+                        <p>程序、策划、美术和声音设计并不是彼此割裂的环节。团队成员围绕同一个体验目标反复打磨，把概念、技术和情绪合在一起。</p>
+                    </article>
+                </div>
+                <div class="stat-strip" data-reveal>
+                    <div><strong>01</strong><span>已展示主作品</span></div>
+                    <div><strong>06</strong><span>团队职能</span></div>
+                    <div><strong>09</strong><span>现有媒体素材</span></div>
+                    <div><strong>∞</strong><span>正在开发的新想法</span></div>
+                </div>
+            </section>
+
+            <section id="team" class="section">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker">The Squad</p>
+                        <h2 class="section-title">团队成员</h2>
+                    </div>
+                    <p class="section-copy">保留原介绍页的团队结构，把成员介绍整合为完整站点中的团队栏目。</p>
+                </div>
+                <div class="team-grid">
+                    <article class="team-card" data-reveal>
+                        <img src="./images/me.jpg" alt="团队负责人头像">
+                        <div><h3>团队负责人</h3><p class="role">Team Lead / Game Programmer</p><p>把控项目整体进度与方向，协调各部门协作，并亲自处理关键技术问题。</p></div>
+                    </article>
+                    <article class="team-card" data-reveal>
+                        <img src="./images/xie.jpg" alt="程序成员头像">
+                        <div><h3>游戏程序</h3><p class="role">Game Programmer</p><p>构建游戏世界的底层逻辑，将玩法机制转化为稳定、流畅的运行指令。</p></div>
+                    </article>
+                    <article class="team-card" data-reveal>
+                        <img src="./images/xu.jpg" alt="策划成员头像">
+                        <div><h3>游戏策划</h3><p class="role">Game Designer</p><p>负责核心机制与关卡流程，在挑战与乐趣之间寻找玩家愿意反复尝试的平衡。</p></div>
+                    </article>
+                    <article class="team-card" data-reveal>
+                        <img src="./images/wang.jpg" alt="声音设计成员头像">
+                        <div><h3>声音设计</h3><p class="role">Composer / Sound Designer</p><p>用音乐与环境音塑造情绪，让体验不只停留在视觉层面。</p></div>
+                    </article>
+                    <article class="team-card" data-reveal>
+                        <img src="./images/liu.jpg" alt="主美成员头像">
+                        <div><h3>主美</h3><p class="role">Lead Artist</p><p>确定整体视觉基调，从角色原画到最终渲染风格，持续把控画面质量。</p></div>
+                    </article>
+                    <article class="team-card" data-reveal>
+                        <img src="./images/lin.jpg" alt="游戏美术成员头像">
+                        <div><h3>游戏美术</h3><p class="role">Game Artist</p><p>专注场景细节与道具资产设计，让世界的每个角落都保留故事感。</p></div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="media" class="section" data-filter-scope>
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker">Media Gallery</p>
+                        <h2 class="section-title">媒体库</h2>
+                    </div>
+                    <p class="section-copy">原图片资源不再散落在介绍页里，而是作为完整站点的素材栏目集中展示。点击任意图片可以预览大图。</p>
+                </div>
+                <div class="filter-row">
+                    <button class="chip is-active" type="button" data-filter="all">全部</button>
+                    <button class="chip" type="button" data-filter="game">游戏素材</button>
+                    <button class="chip" type="button" data-filter="team">团队成员</button>
+                    <button class="chip" type="button" data-filter="brand">品牌</button>
+                </div>
+                <div class="media-grid" style="margin-top: 24px;">
+                    <button class="media-tile" type="button" data-filter-item data-tags="game" data-lightbox="./images/haibao.jpg" data-lightbox-alt="心缚游戏海报" data-reveal><img src="./images/haibao.jpg" alt="心缚游戏海报"><span>心缚海报</span></button>
+                    <button class="media-tile" type="button" data-filter-item data-tags="game" data-lightbox="./images/kaishi.jpeg" data-lightbox-alt="游戏入口图" data-reveal><img src="./images/kaishi.jpeg" alt="游戏入口图"><span>入口视觉</span></button>
+                    <button class="media-tile" type="button" data-filter-item data-tags="brand" data-lightbox="./images/logo.jpg" data-lightbox-alt="ZOO Logo" data-reveal><img src="./images/logo.jpg" alt="ZOO Logo"><span>Logo</span></button>
+                    <button class="media-tile" type="button" data-filter-item data-tags="team" data-lightbox="./images/me.jpg" data-lightbox-alt="团队负责人头像" data-reveal><img src="./images/me.jpg" alt="团队负责人头像"><span>Team Lead</span></button>
+                    <button class="media-tile" type="button" data-filter-item data-tags="team" data-lightbox="./images/xie.jpg" data-lightbox-alt="程序成员头像" data-reveal><img src="./images/xie.jpg" alt="程序成员头像"><span>Programmer</span></button>
+                    <button class="media-tile" type="button" data-filter-item data-tags="team" data-lightbox="./images/xu.jpg" data-lightbox-alt="策划成员头像" data-reveal><img src="./images/xu.jpg" alt="策划成员头像"><span>Designer</span></button>
+                    <button class="media-tile" type="button" data-filter-item data-tags="team" data-lightbox="./images/wang.jpg" data-lightbox-alt="声音设计头像" data-reveal><img src="./images/wang.jpg" alt="声音设计头像"><span>Sound</span></button>
+                    <button class="media-tile" type="button" data-filter-item data-tags="team" data-lightbox="./images/liu.jpg" data-lightbox-alt="主美头像" data-reveal><img src="./images/liu.jpg" alt="主美头像"><span>Lead Artist</span></button>
+                    <button class="media-tile" type="button" data-filter-item data-tags="team" data-lightbox="./images/lin.jpg" data-lightbox-alt="游戏美术头像" data-reveal><img src="./images/lin.jpg" alt="游戏美术头像"><span>Game Artist</span></button>
+                </div>
+            </section>
+
+            <section id="community" class="section">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker">Community</p>
+                        <h2 class="section-title">社区与反馈</h2>
+                    </div>
+                    <p class="section-copy">把原页脚的加入社区信息扩展为可交互栏目：复制群号、提交反馈、订阅更新、查看常见问题。</p>
+                </div>
+                <div class="grid grid--2">
+                    <article class="card" data-reveal>
+                        <div class="meta"><span class="tag">官方 QQ 群</span></div>
+                        <h3>000</h3>
+                        <p>点击按钮复制群号。后续如果有真实社群链接，可以直接替换这里。</p>
+                        <div class="section-actions"><button class="button button--primary" type="button" data-copy="000">复制群号</button></div>
+                    </article>
+                    <article class="card" data-reveal>
+                        <div class="meta"><span class="tag">Newsletter</span></div>
+                        <h3>订阅更新</h3>
+                        <form class="form-grid" data-newsletter-form>
+                            <input class="form-field" type="email" placeholder="your@email.com" required>
+                            <button class="button button--primary" type="submit">订阅</button>
+                            <p class="form-status" data-form-status></p>
+                        </form>
+                    </article>
+                    <article class="card" data-reveal>
+                        <div class="meta"><span class="tag">Feedback</span></div>
+                        <h3>玩家反馈</h3>
+                        <form class="form-grid" data-feedback-form>
+                            <input class="form-field" name="name" placeholder="昵称">
+                            <textarea class="form-field" name="message" placeholder="想对工作室说点什么？"></textarea>
+                            <button class="button button--primary" type="submit">提交反馈</button>
+                            <p class="form-status" data-form-status></p>
+                        </form>
+                    </article>
+                    <article class="card" data-reveal>
+                        <div class="meta"><span class="tag">Message Wall</span></div>
+                        <h3>留言墙</h3>
+                        <div class="message-wall" data-message-wall></div>
+                    </article>
+                </div>
+
+                <div class="accordion" data-accordion style="margin-top: 20px;">
+                    <div class="accordion-item">
+                        <button type="button" aria-expanded="false">这个网站现在还是静态网站吗？<span>+</span></button>
+                        <div class="accordion-panel">是。所有栏目都合并在首页，仍然可以直接用浏览器打开，也适合部署到 GitHub Pages。</div>
+                    </div>
+                    <div class="accordion-item">
+                        <button type="button" aria-expanded="false">反馈和订阅会发送到服务器吗？<span>+</span></button>
+                        <div class="accordion-panel">不会。当前是本地交互演示，数据保存在浏览器 localStorage，后续可以再接真实后端。</div>
                     </div>
                 </div>
-                <div class="p-8">
-                    <p class="text-gray-400 leading-relaxed">
-                        一个可以直接在网页里玩的小游戏窗口。收集绿色信号、躲开红色故障块，点击这张卡片即可开始试玩。
-                    </p>
-                    <span class="mt-6 inline-flex text-sm font-bold tracking-widest uppercase text-emerald-400">Click to launch</span>
-                </div>
-            </button>
-        </div>
-    </main>
+            </section>
+        </main>
 
-    <!-- 团队介绍区域 -->
-    <section id="team" class="max-w-7xl mx-auto px-6 py-32">
-        <div class="text-center mb-20">
-            <h2 class="font-gaming text-4xl font-bold mb-4 tracking-tighter uppercase">The Squad</h2>
-            <p class="text-gray-500 text-sm tracking-widest uppercase">Meet the developers behind the screen</p>
-            <div class="w-20 h-1 bg-emerald-500 mx-auto mt-6"></div>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-x-8 gap-y-16">
-
-             <!-- 成员 : 星 -->
-            <div class="group">
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/me.jpg" alt="星" class="team-img w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <h3 class="font-gaming text-2xl text-white mb-2">星</h3>
-                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Team Lead/Game Programmer</p>
-                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                   团队的领航员与程序技术核心。不仅把控着项目的整体进度与方向，协调各部门协作，还亲自上阵解决最棘手的技术难题，是连接梦想与现实的坚实桥梁。
-                </p>
+        <footer class="footer">
+            <div class="footer__inner">
+                <span class="font-gaming">ZOO Studio</span>
+                <span>&copy; 2026 PRISONER1145 INDIE STUDIO.</span>
             </div>
-            
-            <!-- 成员 : 谢 -->
-            <div class="group">
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/xie.jpg" alt="谢" class="team-img w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <h3 class="font-gaming text-2xl text-white mb-2">杰</h3>
-                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Game Programmer</p>
-                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                    构建游戏世界的底层逻辑。他是代码的守望者，负责将复杂的玩法机制转化为流畅的运行指令，致力于消灭每一个隐藏的 Bug，确保游戏运行坚如磐石。
-                </p>
-            </div>
+        </footer>
+    </div>
 
-            <!-- 成员 : 桓 -->
-            <div class="group">
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/xu.jpg" alt="桓" class="team-img w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <h3 class="font-gaming text-2xl text-white mb-2">桓</h3>
-                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Game Designer</p>
-                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                    脑洞大开的玩法构筑师。负责设计游戏的核心机制与关卡流程，致力于在挑战与乐趣之间寻找完美的平衡点，确保玩家的每一次交互都充满惊喜与成就感。
-                </p>
-            </div>
-
-           
-
-            <!-- 成员 4: Wang -->
-            <div class="group">
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/wang.jpg" alt="翼" class="team-img w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <h3 class="font-gaming text-2xl text-white mb-2">汪</h3>
-                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Composer / Sound Designer</p>
-                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                    听觉世界的缔造者。无论是激昂的战斗曲还是细腻的环境音，他都能精准捕捉。他用声音调动玩家的情绪，为游戏注入灵魂，让体验不再止于视觉。
-                </p>
-            </div>
-
-             <!-- 成员 : Liu -->
-            <div class="group">
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/liu.jpg" alt="佚" class="team-img w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <h3 class="font-gaming text-2xl text-white mb-2">佚</h3>
-                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Lead Artist</p>
-                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                   美术风格的掌舵人。确立游戏的整体视觉基调，从角色原画到最终渲染风格，他严格把控每一帧画面的质量，力求在技术限制下达到极致的艺术表现力。
-                </p>
-            </div>
-
-
-            <!-- 成员 : Lin -->
-            <div class="group">
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-gray-900 mb-6 relative">
-                    <img src="./images/lin.jpg" alt="林" class="team-img w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <h3 class="font-gaming text-2xl text-white mb-2">林</h3>
-                <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4">Game Artist</p>
-                <p class="text-gray-400 text-sm leading-relaxed border-l-2 border-emerald-500/30 pl-4">
-                   视觉氛围的魔术师。专注于场景细节与道具资产的设计，用细腻的笔触填补游戏世界的每一个角落，让画面充满故事感，让玩家沉浸于独特的艺术氛围中。
-                </p>
-            </div>
-
-           
-        </div>
-    </section>
-
-    <!-- 页脚：已替换为 QQ 群 -->
-    <footer id="join" class="py-20 border-t border-white/5 bg-black">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h2 class="font-gaming text-2xl font-bold mb-8">JOIN OUR COMMUNITY</h2>
-            
-            <!-- QQ群 卡片 -->
-            <div class="mb-16">
-                <div class="inline-flex items-center justify-center gap-4 border border-emerald-500/30 bg-emerald-900/10 px-8 py-4 rounded-xl hover:bg-emerald-900/20 transition-all cursor-pointer group">
-                    <!-- QQ Icon SVG -->
-                    <svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-                    <div class="text-left">
-                        <div class="text-xs text-emerald-500 font-bold tracking-widest uppercase">官方 QQ 群</div>
-                        <div class="text-2xl font-gaming text-white font-bold group-hover:text-emerald-400 transition-colors">000</div>
-                    </div>
-                </div>
-            </div>
-
-            <p class="text-gray-700 text-[10px] tracking-[0.4em] uppercase">
-                &copy; 2026 PRISONER1145 INDIE STUDIO.
-            </p>
-        </div>
-    </footer>
+    <div class="lightbox" data-lightbox-viewer aria-modal="true" role="dialog" aria-label="图片预览">
+        <button class="button lightbox__close" type="button" data-lightbox-close>关闭</button>
+        <img alt="">
+    </div>
 
     <div id="mini-game-modal" class="game-modal" aria-hidden="true">
         <div class="game-modal__panel" role="dialog" aria-modal="true" aria-label="Signal Run playable mini game">
@@ -484,7 +256,7 @@
                     <h2 class="game-modal__title font-gaming">Signal Run</h2>
                 </div>
                 <div class="game-modal__actions">
-                    <a class="game-modal__button inline-flex items-center" href="./mini-game.html" target="_blank" rel="noopener">新窗口打开</a>
+                    <a class="game-modal__button" href="./mini-game.html" target="_blank" rel="noopener">新窗口打开</a>
                     <button type="button" class="game-modal__button" data-close-mini-game>关闭</button>
                 </div>
             </div>
@@ -492,56 +264,6 @@
         </div>
     </div>
 
-    <script>
-        (() => {
-            const modal = document.getElementById("mini-game-modal");
-            const frame = document.getElementById("mini-game-frame");
-            const openButtons = document.querySelectorAll("[data-open-mini-game]");
-            const closeButtons = modal ? modal.querySelectorAll("[data-close-mini-game]") : [];
-            let activeTrigger = null;
-
-            if (!modal || !frame || openButtons.length === 0) return;
-
-            const openGame = (trigger) => {
-                activeTrigger = trigger;
-                if (!frame.getAttribute("src")) frame.setAttribute("src", frame.dataset.src);
-                modal.classList.add("is-open");
-                modal.setAttribute("aria-hidden", "false");
-                document.body.classList.add("game-modal-open");
-                closeButtons[0]?.focus({ preventScroll: true });
-            };
-
-            const closeGame = () => {
-                modal.classList.remove("is-open");
-                modal.setAttribute("aria-hidden", "true");
-                document.body.classList.remove("game-modal-open");
-                activeTrigger?.focus({ preventScroll: true });
-            };
-
-            openButtons.forEach((button) => {
-                button.addEventListener("click", () => openGame(button));
-            });
-
-            closeButtons.forEach((button) => {
-                button.addEventListener("click", closeGame);
-            });
-
-            modal.addEventListener("click", (event) => {
-                if (event.target === modal) closeGame();
-            });
-
-            document.addEventListener("keydown", (event) => {
-                if (event.key === "Escape" && modal.classList.contains("is-open")) closeGame();
-            });
-
-            window.addEventListener("message", (event) => {
-                if (event.data?.type === "zoo-mini-game-close" && modal.classList.contains("is-open")) closeGame();
-            });
-        })();
-    </script>
-
+    <script src="./js/site.js"></script>
 </body>
 </html>
-
-
-
